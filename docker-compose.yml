@@ -1,0 +1,95 @@
+version: '3.9'
+
+services:
+  user-db:
+    image: postgres:15
+    container_name: user-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: users_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - user-db-data:/var/lib/postgresql/data
+
+  workout-db:
+    image: postgres:15
+    container_name: workout-db
+    environment:
+      POSTGRES_USER: workout
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: workouts_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - workout-db-data:/var/lib/postgresql/data
+
+  session-db:
+    image: postgres:15
+    container_name: session-db
+    environment:
+      POSTGRES_USER: session
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: sessions_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - session-db-data:/var/lib/postgresql/data
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - user-db
+    environment:
+      DB_HOST: user-db
+      DB_PORT: 5432
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_NAME: users_db
+
+  workout-service:
+    build:
+      context: ./workout-service
+      dockerfile: Dockerfile
+    container_name: workout-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - workout-db
+      - user-service
+    environment:
+      DB_HOST: workout-db
+      DB_PORT: 5432
+      DB_USER: workout
+      DB_PASSWORD: password
+      DB_NAME: workouts_db
+      USER_SERVICE_URL: http://user-service:8081/api/v1
+
+  session-service:
+    build:
+      context: ./session-service
+      dockerfile: Dockerfile
+    container_name: session-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - session-db
+      - workout-service
+    environment:
+      DB_HOST: session-db
+      DB_PORT: 5432
+      DB_USER: session
+      DB_PASSWORD: password
+      DB_NAME: sessions_db
+      WORKOUT_SERVICE_URL: http://workout-service:8082/api/v1
+
+volumes:
+  user-db-data:
+  workout-db-data:
+  session-db-data:

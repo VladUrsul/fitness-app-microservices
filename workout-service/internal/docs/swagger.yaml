@@ -1,0 +1,67 @@
+definitions:
+  models.Workout:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      scheduled:
+        type: string
+      type:
+        example: Yoga
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        example: 1
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /workouts:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Workout
+        in: body
+        name: workout
+        required: true
+        schema:
+          $ref: '#/definitions/models.Workout'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Workout'
+      summary: Create a workout
+      tags:
+      - Workouts
+  /workouts/{id}:
+    get:
+      parameters:
+      - description: Workout ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Workout'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a workout by ID
+      tags:
+      - Workouts
+swagger: "2.0"

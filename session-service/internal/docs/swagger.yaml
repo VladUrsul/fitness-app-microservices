@@ -1,0 +1,65 @@
+definitions:
+  models.Session:
+    properties:
+      created_at:
+        type: string
+      finished_at:
+        type: string
+      id:
+        type: integer
+      started_at:
+        type: string
+      updated_at:
+        type: string
+      workout_id:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /sessions:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Session
+        in: body
+        name: session
+        required: true
+        schema:
+          $ref: '#/definitions/models.Session'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Session'
+      summary: Create a session
+      tags:
+      - Sessions
+  /sessions/{id}:
+    get:
+      parameters:
+      - description: Session ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Session'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a session by ID
+      tags:
+      - Sessions
+swagger: "2.0"
