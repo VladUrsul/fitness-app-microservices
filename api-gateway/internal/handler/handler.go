@@ -3,7 +3,7 @@ package handler
 import (
 	"fitness-app-microservices/api-gateway/internal/config"
 	"fitness-app-microservices/api-gateway/internal/grpc"
-	pb "fitness-app-microservices/api-gateway/proto"
+	pb "fitness-app-microservices/proto"
 )
 
 type Handler struct {

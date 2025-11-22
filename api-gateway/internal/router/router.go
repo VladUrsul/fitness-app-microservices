@@ -23,6 +23,10 @@ func SetupRouter(cfg *config.Config) *gin.Engine {
 		api.GET("/users/:id", h.GetUser)
 		api.GET("/sessions/:id", h.GetSession)
 		api.GET("/workouts/:id", h.GetWorkout)
+
+		api.POST("/users", h.CreateUser)
+		api.POST("/sessions", h.CreateSession)
+		api.POST("/workouts", h.CreateWorkout)
 	}
 
 	return r

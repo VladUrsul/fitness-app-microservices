@@ -5,8 +5,12 @@ go 1.25.4
 require (
 	github.com/gin-gonic/gin v1.11.0
 	google.golang.org/grpc v1.77.0
-	google.golang.org/protobuf v1.36.10
+	google.golang.org/protobuf v1.36.10 // indirect
 )
+
+require fitness-app-microservices/proto v0.0.0
+
+replace fitness-app-microservices/proto => ../proto
 
 require (
 	github.com/bytedance/sonic v1.14.0 // indirect

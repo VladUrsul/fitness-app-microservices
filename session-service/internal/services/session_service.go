@@ -7,7 +7,7 @@ import (
 	"fitness-app-microservices/session-service/internal/domain/models"
 )
 
-func CreateSession(s *models.Session) (*models.Session, error) {
+func CreateSessionService(s *models.Session) (*models.Session, error) {
 	if !clients.VerifyWorkoutExists(s.WorkoutID) {
 		return nil, errors.New("workout does not exist")
 	}
@@ -17,7 +17,7 @@ func CreateSession(s *models.Session) (*models.Session, error) {
 	return s, nil
 }
 
-func GetSession(id uint) (*models.Session, error) {
+func GetSessionService(id uint) (*models.Session, error) {
 	var s models.Session
 	if err := db.DB.First(&s, id).Error; err != nil {
 		return nil, err

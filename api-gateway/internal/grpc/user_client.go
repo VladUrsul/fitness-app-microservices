@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	pb "fitness-app-microservices/api-gateway/proto"
+	pb "fitness-app-microservices/proto"
 )
 
 // NewUserClient creates a gRPC client for the UserService

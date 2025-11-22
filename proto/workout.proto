@@ -2,16 +2,21 @@ syntax = "proto3";
 
 package proto;
 
-option go_package = "/proto;proto";
+option go_package = "/api-gateway/proto;proto";
 
 service WorkoutService {
-  rpc GetWorkout (WorkoutRequest) returns (WorkoutResponse);
+  rpc GetWorkout (GetWorkoutRequest) returns (WorkoutResponse);
+  rpc CreateWorkout (CreateWorkoutRequest) returns (WorkoutResponse);
   rpc ListWorkouts (Empty) returns (WorkoutListResponse);
 }
 
 message Empty {}
 
-message WorkoutRequest {
+message GetWorkoutRequest {
+  string id = 1;
+}
+
+message CreateWorkoutRequest {
   string id = 1;
 }
 

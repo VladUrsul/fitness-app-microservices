@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package proto;
+import "google/protobuf/timestamp.proto";
+
+option go_package = "/proto";
+
+service SessionService {
+    rpc GetSession(SessionRequest) returns (SessionResponse);
+    rpc CreateSession(SessionRequest) returns (SessionResponse);
+}
+
+message SessionRequest {
+    uint32 id = 1;          // for GetSession
+    uint32 workout_id = 2;  // for CreateSession
+    google.protobuf.Timestamp started_at = 3;
+    google.protobuf.Timestamp finished_at = 4;
+}
+
+message SessionResponse {
+    uint32 id = 1;
+    uint32 workout_id = 2;
+    google.protobuf.Timestamp started_at = 3;
+    google.protobuf.Timestamp finished_at = 4;
+    google.protobuf.Timestamp created_at = 5;
+    google.protobuf.Timestamp updated_at = 6;
+}
