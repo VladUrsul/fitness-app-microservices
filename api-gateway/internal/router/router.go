@@ -1,1 +1,29 @@
 package router
+
+import (
+	"fitness-app-microservices/api-gateway/internal/config"
+	"fitness-app-microservices/api-gateway/internal/handler"
+	"fitness-app-microservices/api-gateway/internal/middleware"
+
+	"github.com/gin-gonic/gin"
+)
+
+func SetupRouter(cfg *config.Config) *gin.Engine {
+	r := gin.Default()
+
+	// Middlewares
+	r.Use(middleware.Logger())
+	r.Use(middleware.Auth())
+
+	// Handlers
+	h := handler.NewHandler(cfg)
+
+	api := r.Group("/api")
+	{
+		api.GET("/users/:id", h.GetUser)
+		api.GET("/sessions/:id", h.GetSession)
+		api.GET("/workouts/:id", h.GetWorkout)
+	}
+
+	return r
+}

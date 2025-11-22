@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "/proto;proto";
+
+service SessionService {
+  rpc CreateSession (CreateSessionRequest) returns (SessionResponse);
+  rpc GetSession (SessionRequest) returns (SessionResponse);
+}
+
+message CreateSessionRequest {
+  string user_id = 1;
+}
+
+message SessionRequest {
+  string id = 1;
+}
+
+message SessionResponse {
+  string id = 1;
+  string user_id = 2;
+  string token = 3;
+}

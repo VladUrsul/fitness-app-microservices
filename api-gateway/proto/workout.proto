@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "/proto;proto";
+
+service WorkoutService {
+  rpc GetWorkout (WorkoutRequest) returns (WorkoutResponse);
+  rpc ListWorkouts (Empty) returns (WorkoutListResponse);
+}
+
+message Empty {}
+
+message WorkoutRequest {
+  string id = 1;
+}
+
+message WorkoutResponse {
+  string id = 1;
+  string title = 2;
+  int32 duration_minutes = 3;
+}
+
+message WorkoutListResponse {
+  repeated WorkoutResponse workouts = 1;
+}
