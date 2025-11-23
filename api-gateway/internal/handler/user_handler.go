@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"context"
 	"net/http"
+	"strconv"
 
 	pb "fitness-app-microservices/proto"
 
@@ -10,23 +10,38 @@ import (
 )
 
 func (h *Handler) GetUser(c *gin.Context) {
-	id := c.Param("id")
-	resp, err := h.UserClient.GetUser(context.Background(), &pb.GetUserRequest{Id: id})
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		return
+	}
+
+	resp, err := h.UserClient.GetUser(c, &pb.UserRequest{Id: uint32(id)})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 	c.JSON(http.StatusOK, resp)
 }
 
 func (h *Handler) CreateUser(c *gin.Context) {
-	var req pb.CreateUserRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
+	var body struct {
+		Name  string `json:"name"`
+		Email string `json:"email"`
+	}
+
+	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	resp, err := h.UserClient.CreateUser(context.Background(), &req)
+	resp, err := h.UserClient.CreateUser(c, &pb.CreateUserRequest{
+		Name:  body.Name,
+		Email: body.Email,
+	})
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

@@ -1,30 +1,28 @@
 package main
 
 import (
-	docs "fitness-app-microservices/user-service/internal/docs"
-
-	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
+	"log"
+	"net"
 
 	"fitness-app-microservices/user-service/internal/db"
-	"fitness-app-microservices/user-service/internal/handlers"
+	grpcServer "fitness-app-microservices/user-service/internal/grpc"
+
+	"google.golang.org/grpc"
 )
 
-// @title User Service API
-// @version 1.0
-// @description User microservice for fitness app
-// @BasePath /api/v1
 func main() {
 	db.Connect()
-	docs.SwaggerInfo.BasePath = "/api/v1"
 
-	r := gin.Default()
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	lis, err := net.Listen("tcp", ":50051")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
 
-	api := r.Group("/api/v1")
-	api.POST("/users", handlers.CreateUser)
-	api.GET("/users/:id", handlers.GetUser)
+	s := grpc.NewServer()
+	grpcServer.RegisterUserServiceServer(s)
 
-	r.Run(":8081")
+	log.Println("User gRPC service running on :50051")
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 }

@@ -4,12 +4,15 @@ go 1.25.4
 
 require (
 	github.com/gin-gonic/gin v1.11.0
-	github.com/swaggo/files v1.0.1
-	github.com/swaggo/gin-swagger v1.6.1
 	github.com/swaggo/swag v1.16.6
+	google.golang.org/grpc v1.77.0
 	gorm.io/driver/postgres v1.6.0
 	gorm.io/gorm v1.31.1
 )
+
+require fitness-app-microservices/proto v0.0.0
+
+replace fitness-app-microservices/proto => ../proto
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
@@ -60,5 +63,6 @@ require (
 	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/text v0.31.0 // indirect
 	golang.org/x/tools v0.39.0 // indirect
-	google.golang.org/protobuf v1.36.9 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20251022142026-3a174f9686a8 // indirect
+	google.golang.org/protobuf v1.36.10 // indirect
 )
