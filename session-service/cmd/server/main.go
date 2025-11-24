@@ -5,12 +5,16 @@ import (
 	"net"
 
 	pb "fitness-app-microservices/proto"
+	"fitness-app-microservices/session-service/internal/db"
 	"fitness-app-microservices/session-service/internal/handlers"
 
 	"google.golang.org/grpc"
 )
 
 func main() {
+
+	db.Connect()
+
 	lis, err := net.Listen("tcp", ":50052")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

@@ -6,6 +6,7 @@ import (
 
 	pb "fitness-app-microservices/proto"
 	"fitness-app-microservices/session-service/internal/domain/models"
+	grpcClient "fitness-app-microservices/session-service/internal/grpc"
 	"fitness-app-microservices/session-service/internal/services"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -14,6 +15,7 @@ import (
 
 type SessionServiceServer struct {
 	pb.UnimplementedSessionServiceServer
+	WorkoutClient *grpcClient.WorkoutServiceClient
 }
 
 func (s *SessionServiceServer) CreateSession(ctx context.Context, req *pb.SessionRequest) (*pb.SessionResponse, error) {
@@ -23,7 +25,7 @@ func (s *SessionServiceServer) CreateSession(ctx context.Context, req *pb.Sessio
 		FinishedAt: req.FinishedAt.AsTime(),
 	}
 
-	created, err := services.CreateSessionService(session)
+	created, err := services.CreateSessionService(session, s.WorkoutClient)
 	if err != nil {
 		return nil, err
 	}

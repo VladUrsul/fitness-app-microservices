@@ -4,8 +4,9 @@ import (
 	"log"
 	"net"
 
+	pb "fitness-app-microservices/proto"
 	"fitness-app-microservices/user-service/internal/db"
-	grpcServer "fitness-app-microservices/user-service/internal/grpc"
+	"fitness-app-microservices/user-service/internal/handlers"
 
 	"google.golang.org/grpc"
 )
@@ -19,7 +20,7 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	grpcServer.RegisterUserServiceServer(s)
+	pb.RegisterUserServiceServer(s, &handlers.UserServiceServer{})
 
 	log.Println("User gRPC service running on :50051")
 	if err := s.Serve(lis); err != nil {

@@ -1,11 +1,10 @@
 package db
 
 import (
+	"fitness-app-microservices/user-service/internal/domain/models"
 	"fmt"
 	"log"
 	"os"
-
-	"fitness-app-microservices/user-service/internal/domain/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -14,14 +13,26 @@ import (
 var DB *gorm.DB
 
 func Connect() {
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
-		os.Getenv("DB_HOST"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"), os.Getenv("DB_PORT"))
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbname := os.Getenv("DB_NAME")
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	dsn := fmt.Sprintf(
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname,
+	)
+
+	var err error
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to connect to DB: %v", err)
 	}
-	DB = db
 
-	DB.AutoMigrate(&models.User{})
+	if err := DB.AutoMigrate(&models.User{}); err != nil {
+		log.Fatalf("failed to migrate DB: %v", err)
+	}
+
+	log.Println("User DB connected and migrated")
 }

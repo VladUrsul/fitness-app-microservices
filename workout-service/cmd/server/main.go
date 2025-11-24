@@ -1,26 +1,29 @@
 package main
 
 import (
-	docs "fitness-app-microservices/workout-service/internal/docs"
+	"log"
+	"net"
 
-	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
-
+	pb "fitness-app-microservices/proto"
 	"fitness-app-microservices/workout-service/internal/db"
 	"fitness-app-microservices/workout-service/internal/handlers"
+
+	"google.golang.org/grpc"
 )
 
 func main() {
 	db.Connect()
-	docs.SwaggerInfo.BasePath = "/api/v1"
 
-	r := gin.Default()
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	lis, err := net.Listen("tcp", ":50053") // assign port
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
 
-	api := r.Group("/api/v1")
-	api.POST("/workouts", handlers.CreateWorkout)
-	api.GET("/workouts/:id", handlers.GetWorkout)
+	s := grpc.NewServer()
+	pb.RegisterWorkoutServiceServer(s, &handlers.WorkoutServiceServer{})
 
-	r.Run(":8082")
+	log.Println("WorkoutService gRPC running on :50053")
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 }

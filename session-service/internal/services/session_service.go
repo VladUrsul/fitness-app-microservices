@@ -3,13 +3,14 @@ package services
 import (
 	"errors"
 
-	"fitness-app-microservices/session-service/internal/clients"
 	"fitness-app-microservices/session-service/internal/db"
 	"fitness-app-microservices/session-service/internal/domain/models"
+	grpcClient "fitness-app-microservices/session-service/internal/grpc"
 )
 
-func CreateSessionService(s *models.Session) (*models.Session, error) {
-	if !clients.VerifyWorkoutExists(s.WorkoutID) {
+func CreateSessionService(s *models.Session, workoutClient *grpcClient.WorkoutServiceClient) (*models.Session, error) {
+	exists, err := workoutClient.VerifyWorkoutExists(uint32(s.WorkoutID))
+	if err != nil || !exists {
 		return nil, errors.New("workout does not exist")
 	}
 
