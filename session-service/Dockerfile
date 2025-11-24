@@ -2,10 +2,19 @@
 FROM golang:1.25.4-alpine AS builder
 WORKDIR /app
 
-COPY go.mod go.sum ./
+# Copy proto module
+COPY ../proto ./proto
+
+# Copy this service's go.mod/go.sum
+COPY session-service/go.mod session-service/go.sum ./
+
+# Download dependencies
 RUN go mod download
 
+# Copy service source code
 COPY . .
+
+# Build binary
 RUN go build -o main ./cmd/server
 
 # Run stage
@@ -14,6 +23,5 @@ WORKDIR /app
 COPY --from=builder /app/main .
 COPY --from=builder /app/internal/docs ./docs
 
-EXPOSE 8083
-
+EXPOSE 50053
 CMD ["./main"]

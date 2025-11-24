@@ -6,6 +6,11 @@ import (
 	"log"
 )
 
+// @title Fitness App API Gateway
+// @version 1.0
+// @description API Gateway for fitness microservices
+// @host localhost:8080
+// @BasePath /api
 func main() {
 	cfg := config.LoadConfig()
 

@@ -1,4 +1,4 @@
-module fitness-app-microservices/proto
+module github.com/VladUrsul/fitness-app-microservices/proto
 
 go 1.25.4
 

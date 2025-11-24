@@ -2,14 +2,19 @@
 FROM golang:1.25.4-alpine AS builder
 WORKDIR /app
 
+# Copy proto module
+COPY ../proto ./proto
+
+# Copy this service's go.mod/go.sum
+COPY user-service/go.mod user-service/go.sum ./
+
 # Download dependencies
-COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy source code
+# Copy service source code
 COPY . .
 
-# Build the binary
+# Build binary
 RUN go build -o main ./cmd/server
 
 # Run stage
@@ -18,8 +23,5 @@ WORKDIR /app
 COPY --from=builder /app/main .
 COPY --from=builder /app/internal/docs ./docs
 
-# Expose service port
-EXPOSE 8081
-
-# Start the service
+EXPOSE 50051  
 CMD ["./main"]

@@ -4,11 +4,10 @@ tidy:
 	cd user-service && go mod tidy
 	cd workout-service && go mod tidy
 	cd session-service && go mod tidy
+	cd api-gateway && go mod tidy
 
 swagger:
-	cd user-service && swag init -g ./cmd/server/main.go -o ./internal/docs
-	cd workout-service && swag init -g ./cmd/server/main.go -o ./internal/docs
-	cd session-service && swag init -g ./cmd/server/main.go -o ./internal/docs
+	cd api-gateway && swag init -g ./cmd/gateway/main.go -o ./internal/docs
 
 build:
 	docker-compose build

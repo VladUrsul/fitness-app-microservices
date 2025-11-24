@@ -1,0 +1,271 @@
+basePath: /api
+definitions:
+  handler.SessionRequestDoc:
+    properties:
+      finished_at:
+        type: string
+      started_at:
+        type: string
+      workout_id:
+        type: integer
+    type: object
+  handler.SessionResponseDoc:
+    properties:
+      created_at:
+        type: string
+      finished_at:
+        type: string
+      id:
+        type: integer
+      started_at:
+        type: string
+      updated_at:
+        type: string
+      workout_id:
+        type: integer
+    type: object
+  handler.UserRequestDoc:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+    type: object
+  handler.UserResponseDoc:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  handler.WorkoutRequestDoc:
+    properties:
+      type:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  handler.WorkoutResponseDoc:
+    properties:
+      created_at:
+        type: string
+      duration_minutes:
+        type: integer
+      id:
+        type: integer
+      type:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Gateway for fitness microservices
+  title: Fitness App API Gateway
+  version: "1.0"
+paths:
+  /sessions:
+    post:
+      consumes:
+      - application/json
+      description: Create a session via SessionService gRPC
+      parameters:
+      - description: Session payload
+        in: body
+        name: session
+        required: true
+        schema:
+          $ref: '#/definitions/handler.SessionRequestDoc'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.SessionResponseDoc'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new session
+      tags:
+      - Sessions
+  /sessions/{id}:
+    get:
+      description: Retrieve a session from the SessionService via gRPC
+      parameters:
+      - description: Session ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.SessionResponseDoc'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a session by ID
+      tags:
+      - Sessions
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Create a user via UserService gRPC
+      parameters:
+      - description: User payload
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/handler.UserRequestDoc'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.UserResponseDoc'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new user
+      tags:
+      - Users
+  /users/{id}:
+    get:
+      description: Retrieve a user from the UserService via gRPC
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.UserResponseDoc'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a user by ID
+      tags:
+      - Users
+  /workouts:
+    post:
+      consumes:
+      - application/json
+      description: Create a workout via WorkoutService gRPC
+      parameters:
+      - description: Workout payload
+        in: body
+        name: workout
+        required: true
+        schema:
+          $ref: '#/definitions/handler.WorkoutRequestDoc'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.WorkoutResponseDoc'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new workout
+      tags:
+      - Workouts
+  /workouts/{id}:
+    get:
+      description: Retrieve a workout from the WorkoutService via gRPC
+      parameters:
+      - description: Workout ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.WorkoutResponseDoc'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a workout by ID
+      tags:
+      - Workouts
+swagger: "2.0"

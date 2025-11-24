@@ -1,11 +1,26 @@
-FROM golang:1.21-alpine
-
+# Build stage
+FROM golang:1.25.4-alpine AS builder
 WORKDIR /app
-COPY go.mod go.sum ./
+
+# Copy proto module
+COPY ../proto ./proto
+
+# Copy go.mod/go.sum
+COPY session-service/go.mod session-service/go.sum ./
+
+# Download dependencies
 RUN go mod download
+
+# Copy gateway source
 COPY . .
 
-RUN go build -o gateway ./cmd/gateway
+# Build binary
+RUN go build -o main ./cmd/gateway/main.go
+
+# Run stage
+FROM alpine:latest
+WORKDIR /app
+COPY --from=builder /app/main .
 
 EXPOSE 8080
-CMD ["./gateway"]
+CMD ["./main"]

@@ -2,14 +2,24 @@ package handler
 
 import (
 	"context"
+	_ "fitness-app-microservices/api-gateway/internal/docs"
+	pb "fitness-app-microservices/proto"
 	"net/http"
 	"strconv"
-
-	pb "fitness-app-microservices/proto"
 
 	"github.com/gin-gonic/gin"
 )
 
+// GetUser godoc
+// @Summary Get a user by ID
+// @Description Retrieve a user from the UserService via gRPC
+// @Tags Users
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {object} UserResponseDoc
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /users/{id} [get]
 func (h *Handler) GetUser(c *gin.Context) {
 	idStr := c.Param("id")
 
@@ -30,6 +40,17 @@ func (h *Handler) GetUser(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+// CreateUser godoc
+// @Summary Create a new user
+// @Description Create a user via UserService gRPC
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param user body UserRequestDoc true "User payload"
+// @Success 200 {object} UserResponseDoc
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /users [post]
 func (h *Handler) CreateUser(c *gin.Context) {
 	var req pb.CreateUserRequest
 
