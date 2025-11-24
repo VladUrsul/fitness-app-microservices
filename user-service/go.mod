@@ -11,6 +11,7 @@ require (
 require (
 	fitness-app-microservices/proto v0.0.0
 	google.golang.org/protobuf v1.36.10
+//github.com/VladUrsul/fitness-app-microservices/proto v0.0.1
 )
 
 replace fitness-app-microservices/proto => ../proto

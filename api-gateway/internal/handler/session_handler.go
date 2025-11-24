@@ -19,6 +19,7 @@ import (
 // @Success 200 {object} SessionResponseDoc
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
+// @Security BearerAuth
 // @Router /sessions/{id} [get]
 func (h *Handler) GetSession(c *gin.Context) {
 	idStr := c.Param("id")
@@ -51,6 +52,7 @@ func (h *Handler) GetSession(c *gin.Context) {
 // @Success 200 {object} SessionResponseDoc
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
+// @Security BearerAuth
 // @Router /sessions [post]
 func (h *Handler) CreateSession(c *gin.Context) {
 	var req pb.SessionRequest

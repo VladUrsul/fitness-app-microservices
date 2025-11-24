@@ -1,26 +1,29 @@
-# Build stage
+# ===== Build stage =====
 FROM golang:1.25.4-alpine AS builder
 WORKDIR /app
 
-# Copy proto module
-COPY ../proto ./proto
+RUN apk add --no-cache git ca-certificates
 
-# Copy go.mod/go.sum
-COPY session-service/go.mod session-service/go.sum ./
+COPY proto ./proto
 
-# Download dependencies
+COPY api-gateway/go.mod api-gateway/go.sum ./
+
+RUN go mod edit -replace fitness-app-microservices/proto=./proto
+
 RUN go mod download
 
-# Copy gateway source
-COPY . .
+COPY api-gateway ./api-gateway
 
-# Build binary
-RUN go build -o main ./cmd/gateway/main.go
+WORKDIR /app/api-gateway
+RUN go build -o /app/main ./cmd/gateway/main.go
 
-# Run stage
+# ===== Run stage =====
 FROM alpine:latest
 WORKDIR /app
+
 COPY --from=builder /app/main .
+
+RUN apk add --no-cache ca-certificates
 
 EXPOSE 8080
 CMD ["./main"]

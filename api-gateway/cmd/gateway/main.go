@@ -6,6 +6,9 @@ import (
 	"log"
 )
 
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 // @title Fitness App API Gateway
 // @version 1.0
 // @description API Gateway for fitness microservices

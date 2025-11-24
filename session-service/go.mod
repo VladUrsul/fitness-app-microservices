@@ -3,13 +3,13 @@ module fitness-app-microservices/session-service
 go 1.25.4
 
 require (
+	fitness-app-microservices/proto v0.0.0-00010101000000-000000000000
 	google.golang.org/grpc v1.77.0
 	google.golang.org/protobuf v1.36.10
 	gorm.io/driver/postgres v1.6.0
 	gorm.io/gorm v1.31.1
+//github.com/VladUrsul/fitness-app-microservices/proto v0.0.1
 )
-
-require fitness-app-microservices/proto v0.0.0
 
 replace fitness-app-microservices/proto => ../proto
 

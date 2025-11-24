@@ -19,6 +19,7 @@ import (
 // @Success 200 {object} UserResponseDoc
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
+// @Security BearerAuth
 // @Router /users/{id} [get]
 func (h *Handler) GetUser(c *gin.Context) {
 	idStr := c.Param("id")
@@ -50,6 +51,7 @@ func (h *Handler) GetUser(c *gin.Context) {
 // @Success 200 {object} UserResponseDoc
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
+// @Security BearerAuth
 // @Router /users [post]
 func (h *Handler) CreateUser(c *gin.Context) {
 	var req pb.CreateUserRequest

@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/sessions": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a session via SessionService gRPC",
                 "consumes": [
                     "application/json"
@@ -69,6 +74,11 @@ const docTemplate = `{
         },
         "/sessions/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve a session from the SessionService via gRPC",
                 "produces": [
                     "application/json"
@@ -116,6 +126,11 @@ const docTemplate = `{
         },
         "/users": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a user via UserService gRPC",
                 "consumes": [
                     "application/json"
@@ -168,6 +183,11 @@ const docTemplate = `{
         },
         "/users/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve a user from the UserService via gRPC",
                 "produces": [
                     "application/json"
@@ -215,6 +235,11 @@ const docTemplate = `{
         },
         "/workouts": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a workout via WorkoutService gRPC",
                 "consumes": [
                     "application/json"
@@ -267,6 +292,11 @@ const docTemplate = `{
         },
         "/workouts/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve a workout from the WorkoutService via gRPC",
                 "produces": [
                     "application/json"
@@ -416,17 +446,25 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "API Gateway for fitness microservices",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
-	Host:             "localhost:8080",
-	BasePath:         "/api",
+	Version:          "",
+	Host:             "",
+	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Fitness App API Gateway",
-	Description:      "API Gateway for fitness microservices",
+	Title:            "",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

@@ -4,9 +4,11 @@ import (
 	"context"
 	"errors"
 
-	pb "fitness-app-microservices/proto"
 	"fitness-app-microservices/user-service/internal/domain/models"
 	"fitness-app-microservices/user-service/internal/services"
+
+	//pb "github.com/VladUrsul/fitness-app-microservices/proto"
+	pb "fitness-app-microservices/proto"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gorm.io/gorm"

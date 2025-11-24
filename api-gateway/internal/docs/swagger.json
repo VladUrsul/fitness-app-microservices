@@ -1,16 +1,16 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "API Gateway for fitness microservices",
-        "title": "Fitness App API Gateway",
-        "contact": {},
-        "version": "1.0"
+        "contact": {}
     },
-    "host": "localhost:8080",
-    "basePath": "/api",
     "paths": {
         "/sessions": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a session via SessionService gRPC",
                 "consumes": [
                     "application/json"
@@ -63,6 +63,11 @@
         },
         "/sessions/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve a session from the SessionService via gRPC",
                 "produces": [
                     "application/json"
@@ -110,6 +115,11 @@
         },
         "/users": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a user via UserService gRPC",
                 "consumes": [
                     "application/json"
@@ -162,6 +172,11 @@
         },
         "/users/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve a user from the UserService via gRPC",
                 "produces": [
                     "application/json"
@@ -209,6 +224,11 @@
         },
         "/workouts": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a workout via WorkoutService gRPC",
                 "consumes": [
                     "application/json"
@@ -261,6 +281,11 @@
         },
         "/workouts/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve a workout from the WorkoutService via gRPC",
                 "produces": [
                     "application/json"
@@ -409,6 +434,14 @@
                     "type": "integer"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "API Gateway for fitness microservices",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

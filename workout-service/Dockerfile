@@ -1,27 +1,29 @@
-# Build stage
+# ===== Build stage =====
 FROM golang:1.25.4-alpine AS builder
 WORKDIR /app
 
-# Copy proto module
-COPY ../proto ./proto
+RUN apk add --no-cache git ca-certificates
 
-# Copy this service's go.mod/go.sum
+COPY proto ./proto
+
 COPY workout-service/go.mod workout-service/go.sum ./
 
-# Download dependencies
+RUN go mod edit -replace fitness-app-microservices/proto=./proto
+
 RUN go mod download
 
-# Copy service source code
-COPY . .
+COPY workout-service ./workout-service
 
-# Build binary
-RUN go build -o main ./cmd/server
+WORKDIR /app/workout-service
+RUN go build -o /app/main ./cmd/server/main.go
 
-# Run stage
+# ===== Run stage =====
 FROM alpine:latest
 WORKDIR /app
+
 COPY --from=builder /app/main .
-COPY --from=builder /app/internal/docs ./docs
+
+RUN apk add --no-cache ca-certificates
 
 EXPOSE 50052
 CMD ["./main"]

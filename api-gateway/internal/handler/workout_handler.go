@@ -19,6 +19,7 @@ import (
 // @Success 200 {object} WorkoutResponseDoc
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
+// @Security BearerAuth
 // @Router /workouts/{id} [get]
 func (h *Handler) GetWorkout(c *gin.Context) {
 	idStr := c.Param("id")
@@ -48,6 +49,7 @@ func (h *Handler) GetWorkout(c *gin.Context) {
 // @Success 200 {object} WorkoutResponseDoc
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
+// @Security BearerAuth
 // @Router /workouts [post]
 func (h *Handler) CreateWorkout(c *gin.Context) {
 	var req pb.CreateWorkoutRequest

@@ -10,6 +10,7 @@ require (
 require (
 	fitness-app-microservices/proto v0.0.0
 	google.golang.org/grpc v1.77.0
+//github.com/VladUrsul/fitness-app-microservices/proto v0.0.1
 )
 
 replace fitness-app-microservices/proto => ../proto
