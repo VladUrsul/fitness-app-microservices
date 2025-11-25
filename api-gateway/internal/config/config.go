@@ -13,8 +13,8 @@ func LoadConfig() *Config {
 	return &Config{
 		Port:           getEnv("GATEWAY_PORT", "8080"),
 		UserSvcAddr:    getEnv("USER_SERVICE_ADDR", "localhost:50051"),
-		SessionSvcAddr: getEnv("SESSION_SERVICE_ADDR", "localhost:50052"),
-		WorkoutSvcAddr: getEnv("WORKOUT_SERVICE_ADDR", "localhost:50053"),
+		SessionSvcAddr: getEnv("SESSION_SERVICE_ADDR", "localhost:50053"),
+		WorkoutSvcAddr: getEnv("WORKOUT_SERVICE_ADDR", "localhost:50052"),
 	}
 }
 

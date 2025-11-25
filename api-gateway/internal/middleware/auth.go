@@ -2,17 +2,35 @@ package middleware
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		token := c.GetHeader("Authorization")
-		if token == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "missing token"})
+
+		path := c.Request.URL.Path
+
+		if strings.HasPrefix(path, "/swagger") {
+			c.Next()
 			return
 		}
+
+		if path == "/health" {
+			c.Next()
+			return
+		}
+
+		token := c.GetHeader("Authorization")
+		if token == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": "missing token",
+			})
+			c.Abort()
+			return
+		}
+
 		c.Next()
 	}
 }

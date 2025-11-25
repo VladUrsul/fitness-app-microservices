@@ -3,11 +3,14 @@ package handler
 import (
 	"context"
 	_ "fitness-app-microservices/api-gateway/internal/docs"
+	"fitness-app-microservices/api-gateway/internal/dto"
 	pb "fitness-app-microservices/proto"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // GetSession godoc
@@ -55,13 +58,32 @@ func (h *Handler) GetSession(c *gin.Context) {
 // @Security BearerAuth
 // @Router /sessions [post]
 func (h *Handler) CreateSession(c *gin.Context) {
-	var req pb.SessionRequest
+	var req dto.CreateSessionRequestHTTP
+
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid json"})
 		return
 	}
 
-	resp, err := h.SessionClient.CreateSession(context.Background(), &req)
+	start, err := time.Parse(time.RFC3339, req.StartedAt)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid started_at"})
+		return
+	}
+
+	finish, err := time.Parse(time.RFC3339, req.FinishedAt)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid finished_at"})
+		return
+	}
+
+	grpcReq := &pb.SessionRequest{
+		WorkoutId:  req.WorkoutId,
+		StartedAt:  timestamppb.New(start),
+		FinishedAt: timestamppb.New(finish),
+	}
+
+	resp, err := h.SessionClient.CreateSession(context.Background(), grpcReq)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

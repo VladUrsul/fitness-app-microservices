@@ -7,12 +7,15 @@ import (
 	pb "fitness-app-microservices/proto"
 	"fitness-app-microservices/workout-service/internal/db"
 	"fitness-app-microservices/workout-service/internal/domain/models"
+	"fitness-app-microservices/workout-service/internal/grpc"
+	"fitness-app-microservices/workout-service/internal/services"
 
 	"gorm.io/gorm"
 )
 
 type WorkoutServiceServer struct {
 	pb.UnimplementedWorkoutServiceServer
+	UserClient *grpc.UserServiceClient
 }
 
 func (s *WorkoutServiceServer) CreateWorkout(ctx context.Context, req *pb.CreateWorkoutRequest) (*pb.WorkoutResponse, error) {
@@ -22,11 +25,12 @@ func (s *WorkoutServiceServer) CreateWorkout(ctx context.Context, req *pb.Create
 		UserID:   uint(req.UserId),
 	}
 
-	if err := db.DB.Create(w).Error; err != nil {
+	created, err := services.CreateWorkoutService(w, s.UserClient)
+	if err != nil {
 		return nil, err
 	}
 
-	return mapToResponse(w), nil
+	return mapToResponse(created), nil
 }
 
 func (s *WorkoutServiceServer) GetWorkout(ctx context.Context, req *pb.GetWorkoutRequest) (*pb.WorkoutResponse, error) {

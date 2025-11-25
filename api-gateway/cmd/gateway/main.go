@@ -1,3 +1,13 @@
+// @title Fitness App API Gateway
+// @version 1.0
+// @description API Gateway for fitness microservices
+// @host localhost:8080
+// @BasePath /api
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+
 package main
 
 import (
@@ -6,14 +16,6 @@ import (
 	"log"
 )
 
-// @securityDefinitions.apikey BearerAuth
-// @in header
-// @name Authorization
-// @title Fitness App API Gateway
-// @version 1.0
-// @description API Gateway for fitness microservices
-// @host localhost:8080
-// @BasePath /api
 func main() {
 	cfg := config.LoadConfig()
 

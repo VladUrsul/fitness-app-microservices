@@ -5,7 +5,7 @@ go 1.25.4
 require (
 	github.com/gin-gonic/gin v1.11.0
 	google.golang.org/grpc v1.77.0
-	google.golang.org/protobuf v1.36.10 // indirect
+	google.golang.org/protobuf v1.36.10
 )
 
 require (

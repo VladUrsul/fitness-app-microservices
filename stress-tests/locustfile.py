@@ -1,59 +1,67 @@
 from locust import HttpUser, task, between
 import random
-import time
 import datetime
 
-def unique_email():
-    return f"user_{int(time.time() * 1000)}_{random.randint(10000, 99999)}@example.com"
+class FitnessAppUser(HttpUser):
+    wait_time = between(1, 1) 
 
-def unique_name():
-    return f"User_{int(time.time() * 1000)}_{random.randint(10000, 99999)}"
-
-def random_time():
-    return datetime.datetime.utcnow().isoformat() + "Z"
-
-class FitnessMicroservicesUser(HttpUser):
-    wait_time = between(1, 1)
-    host = "http://127.0.0.1:8081" 
-
-    @task
-    def workflow(self):
-        user_payload = {
-            "name": unique_name(),
-            "email": unique_email()
+    def on_start(self):
+        """Run when a simulated user starts"""
+        self.user_id = None
+        self.workout_id = None
+        self.session_id = None
+        self.headers = {
+            "Authorization": "Bearer dummy_token"
         }
-        user_resp = self.client.post(
-            "/api/v1/users",
-            json=user_payload,
-            name="MS - Create User"
-        )
-        if user_resp.status_code != 200:
+
+    @task(2)
+    def create_user(self):
+        payload = {
+            "name": f"User_{random.randint(1, 1000000)}",
+            "email": f"user_{random.randint(1, 1000000)}@example.com"
+        }
+        response = self.client.post("/api/users", json=payload, headers=self.headers, name="/api/users")
+        if response.status_code == 200:
+            self.user_id = response.json().get("id")
+
+    @task(3)
+    def create_workout(self):
+        if not self.user_id:
             return
-
-        user_id = user_resp.json().get("id")
-
-        workout_payload = {
-            "user_id": user_id,
-            "type": random.choice(["Yoga", "Cardio", "Strength"]),
-            "scheduled": random_time()
+        payload = {
+            "title": f"Workout_{random.randint(1, 100)}",
+            "duration_minutes": random.randint(20, 90),
+            "user_id": self.user_id
         }
-        workout_resp = self.client.post(
-            "http://127.0.0.1:8082/api/v1/workouts",
-            json=workout_payload,
-            name="MS - Create Workout"
-        )
-        if workout_resp.status_code != 200:
+        response = self.client.post("/api/workouts", json=payload, headers=self.headers, name="/api/workouts")
+        if response.status_code == 200:
+            self.workout_id = response.json().get("id")
+
+    @task(4)
+    def create_session(self):
+        if not self.workout_id:
             return
-
-        workout_id = workout_resp.json().get("id")
-
-        session_payload = {
-            "workout_id": workout_id,
-            "started_at": random_time(),
-            "finished_at": random_time()
+        now = datetime.datetime.utcnow()
+        payload = {
+            "workout_id": self.workout_id,
+            "started_at": now.isoformat() + "Z",
+            "finished_at": (now + datetime.timedelta(minutes=random.randint(20, 90))).isoformat() + "Z"
         }
-        self.client.post(
-            "http://127.0.0.1:8083/api/v1/sessions",
-            json=session_payload,
-            name="MS - Create Session"
-        )
+        response = self.client.post("/api/sessions", json=payload, headers=self.headers, name="/api/sessions")
+        if response.status_code == 200:
+            self.session_id = response.json().get("id")
+
+    @task(1)
+    def get_user(self):
+        if self.user_id:
+            self.client.get(f"/api/users/{self.user_id}", headers=self.headers, name="/api/users/:id")
+
+    @task(2)
+    def get_workout(self):
+        if self.workout_id:
+            self.client.get(f"/api/workouts/{self.workout_id}", headers=self.headers, name="/api/workouts/:id")
+
+    @task(3)
+    def get_session(self):
+        if self.session_id:
+            self.client.get(f"/api/sessions/{self.session_id}", headers=self.headers, name="/api/sessions/:id")

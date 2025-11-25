@@ -1,3 +1,4 @@
+basePath: /api
 definitions:
   handler.SessionRequestDoc:
     properties:
@@ -65,8 +66,12 @@ definitions:
       user_id:
         type: integer
     type: object
+host: localhost:8080
 info:
   contact: {}
+  description: API Gateway for fitness microservices
+  title: Fitness App API Gateway
+  version: "1.0"
 paths:
   /sessions:
     post:
@@ -277,7 +282,6 @@ paths:
       - Workouts
 securityDefinitions:
   BearerAuth:
-    description: API Gateway for fitness microservices
     in: header
     name: Authorization
     type: apiKey

@@ -1,8 +1,13 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "API Gateway for fitness microservices",
+        "title": "Fitness App API Gateway",
+        "contact": {},
+        "version": "1.0"
     },
+    "host": "localhost:8080",
+    "basePath": "/api",
     "paths": {
         "/sessions": {
             "post": {
@@ -438,7 +443,6 @@
     },
     "securityDefinitions": {
         "BearerAuth": {
-            "description": "API Gateway for fitness microservices",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
